@@ -65,6 +65,7 @@
             isLightOn = !isLightOn;
             var lightStatusText = document.getElementById('lightStatusText');
             lightStatusText.innerText = isLightOn ? 'on' : 'off';
+            sendMessage();
         }
         // Function to fetch temperature data from Azure Function
     function fetchTemperatureData() {
@@ -86,6 +87,28 @@
           document.getElementById('temperature').innerText = 'Error fetching data';
         });
     }
+    async function sendMessage() {
+            const functionKey = 'tFY12iD0ZTgjdSii4ClZ_yT5_gBRK2AAezl4AQsyiPBwAzFu3M-3sQ==';  // Replace with your actual function key
+            const apiUrl = 'https://func-picohallonpaj.azurewebsites.net/api/sendMessage';
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-functions-key': functionKey,
+                    },
+                });
+
+                if (response.ok) {
+                    console.log('Message sent successfully');
+                } else {
+                    console.error('Failed to send message:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
+        }
        
 
         // Initial setup
