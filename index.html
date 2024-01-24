@@ -1,13 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Home Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: rgb(240, 192, 192);
+            color: rgb(245, 122, 142);
+        }
+        #temperature {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #lightStatus {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        #toggleButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
 <body>
-<form action="./lighton">
-<input type="submit" value="Light on" />
-</form>
-<form action="./lightoff">
-<input type="submit" value="Light off" />
-</form>
-<p>LED is {state}</p>
-<p>Temperature is {temperature}</p>
+    <h1>Smart Home Control</h1>
+    
+    <div id="temperature">Temperature: <span id="temperatureValue">25°C</span></div>
+    
+    <div id="lightStatus">Light is <span id="lightStatusText">off</span></div>
+    
+    <button id="toggleButton" onclick="toggleLight()">Toggle Light</button>
+
+    <button id="getTemperatureButton" onclick="updateTemperature()">Get Temperature</button>
+
+
+    <script>
+        // Mock temperature value for demonstration purposes
+        var temperatureValue = 25;
+        // Initial light status
+        var isLightOn = false;
+
+        // Function to update temperature display
+        function updateTemperature() {
+            document.getElementById('temperatureValue').innerText = fetchLatestTemperature() + '°C';
+        }
+
+        // Function to toggle light status
+        function toggleLight() {
+            isLightOn = !isLightOn;
+            var lightStatusText = document.getElementById('lightStatusText');
+            lightStatusText.innerText = isLightOn ? 'on' : 'off';
+        }
+        async function fetchLatestTemperature() {
+            try {
+               const response = await fetch('https://func-picohallonpaj.azurewebsites.net/api/GetLatestTemp');
+                
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching temperature:', error);
+                return null;
+            }
+        }
+
+        // Initial setup
+        updateTemperature();
+    </script>
 </body>
 </html>
